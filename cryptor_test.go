@@ -18,8 +18,12 @@ func (m *rwcMock) Close() error {
 	return nil
 }
 
+func newRWCMock() *rwcMock {
+	return &rwcMock{Buffer: bytes.NewBuffer([]byte{})}
+}
+
 func TestCryptor(t *testing.T) {
-	m := &rwcMock{Buffer: bytes.NewBuffer([]byte{})}
+	m := newRWCMock()
 	key := make([]byte, 32)
 	_, err := rand.Read(key)
 	if err != nil {
@@ -32,7 +36,6 @@ func TestCryptor(t *testing.T) {
 	}
 	c.Write([]byte("hoge"))
 	c.Close()
-	t.Log(m.Buffer.Bytes())
 
 	buf := bytes.NewBuffer(m.Buffer.Bytes())
 	m = &rwcMock{Buffer: buf}
