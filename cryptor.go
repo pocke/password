@@ -11,8 +11,8 @@ type Cryptor struct {
 	storage io.ReadWriteCloser
 }
 
-func NewCryptor(rwc io.ReadWriteCloser, key []byte) (*Cryptor, error) {
-	c := &Cryptor{storage: rwc}
+func NewCryptor(input io.ReadWriteCloser, key []byte) (*Cryptor, error) {
+	c := &Cryptor{storage: input}
 
 	err := c.setStream(key)
 	if err != nil {
