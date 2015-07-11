@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io"
+	"strings"
 )
 
 type Account struct {
@@ -29,4 +30,14 @@ func LoadAccounts(file io.ReadWriteCloser, key []byte) ([]Account, error) {
 	}
 
 	return res, nil
+}
+
+func (a Accounts) Filter(t string) Accounts {
+	res := make(Accounts, 0)
+	for _, v := range a {
+		if strings.Contains(v.Name, t) {
+			res = append(res, v)
+		}
+	}
+	return res
 }

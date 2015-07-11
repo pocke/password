@@ -47,3 +47,32 @@ func TestLoadAccounts(t *testing.T) {
 		}
 	}
 }
+
+func TestAccountsFilter(t *testing.T) {
+	a := Accounts{
+		{Name: "foo", Password: "piyopiyo", Icon: "aaa"},
+		{Name: "fooo", Password: "piyopiyo", Icon: "aaa"},
+		{Name: "nya", Password: "honya", Icon: "bbb"},
+	}
+
+	got := a.Filter("foo")
+	expected := Accounts{
+		{Name: "foo", Password: "piyopiyo", Icon: "aaa"},
+		{Name: "fooo", Password: "piyopiyo", Icon: "aaa"},
+	}
+
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Expected: %+v, but got %+v", expected, got)
+	}
+
+	got = a.Filter("")
+	if !reflect.DeepEqual(got, a) {
+		t.Errorf("Expected: %+v, but got %+v", a, got)
+	}
+
+	got = a.Filter("piyo")
+	expected = Accounts{}
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Expected: %+v, but got %+v", expected, got)
+	}
+}
