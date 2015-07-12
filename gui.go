@@ -27,8 +27,18 @@ func guiMain() {
 
 	entry := gtk.NewEntry()
 
+	store := gtk.NewListStore(glib.G_TYPE_STRING)
+	treeview := gtk.NewTreeView()
+	treeview.SetModel(store)
+	treeview.AppendColumn(gtk.NewTreeViewColumnWithAttributes("icon", gtk.NewCellRendererPixbuf(), "pixbuf", 0))
+	treeview.AppendColumn(gtk.NewTreeViewColumnWithAttributes("name", gtk.NewCellRendererText(), "text", 1))
+
+	swin := gtk.NewScrolledWindow(nil, nil)
+	swin.Add(treeview)
+
 	vbox := gtk.NewVBox(false, 0)
 	vbox.PackStart(entry, false, false, 1)
+	vbox.PackStart(swin, true, true, 0)
 
 	window.Add(vbox)
 
