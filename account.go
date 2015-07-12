@@ -41,3 +41,24 @@ func (a Accounts) Filter(t string) Accounts {
 	}
 	return res
 }
+
+func (a Accounts) Watch(filter <-chan string) <-chan Accounts {
+	res := make(chan Accounts)
+	go func() {
+		for s := range filter {
+			res <- a.Filter(s)
+		}
+	}()
+	return res
+}
+
+func (a *Accounts) AddAndSave(ac Account, file io.ReadWriteCloser, key []byte) error {
+	c, err := NewCryptor(file, key)
+	if err != nil {
+		return err
+	}
+	defer c.Close()
+	n := append(*a, ac)
+	a = &n
+	return json.NewEncoder(c).Encode(*a)
+}

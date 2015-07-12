@@ -58,5 +58,4 @@ func guiMain(ch <-chan Accounts) {
 	window.SetSizeRequest(460, 640)
 	window.SetResizable(false)
 	window.ShowAll()
-	gtk.Main()
 }

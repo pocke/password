@@ -1,21 +1,31 @@
 package main
 
-import "time"
+import (
+	"time"
+
+	"github.com/mattn/go-gtk/gtk"
+)
 
 func main() {
-	ch := make(chan Accounts)
+	accounts := make(chan Accounts)
+
 	go func() {
-		ch <- Accounts{
+		accounts <- Accounts{
 			{Name: "foo"},
 			{Name: "bar"},
 			{Name: "baz"},
 		}
 		time.Sleep(1 * time.Second)
-		ch <- Accounts{
+		accounts <- Accounts{
 			{Name: "hoge"},
 			{Name: "fuga"},
 			{Name: "piyo"},
 		}
 	}()
-	guiMain(ch)
+
+	guiMain(accounts)
+	if !KeyExist() {
+
+	}
+	gtk.Main()
 }
