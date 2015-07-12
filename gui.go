@@ -14,7 +14,7 @@ func gthread(f func()) {
 	f()
 }
 
-func guiMain() {
+func guiMain(ch <-chan Accounts) {
 	glib.ThreadInit(nil)
 	gdk.ThreadsInit()
 	gdk.ThreadsEnter()
@@ -30,8 +30,21 @@ func guiMain() {
 	store := gtk.NewListStore(glib.G_TYPE_STRING)
 	treeview := gtk.NewTreeView()
 	treeview.SetModel(store)
-	treeview.AppendColumn(gtk.NewTreeViewColumnWithAttributes("icon", gtk.NewCellRendererPixbuf(), "pixbuf", 0))
-	treeview.AppendColumn(gtk.NewTreeViewColumnWithAttributes("name", gtk.NewCellRendererText(), "text", 1))
+	// treeview.AppendColumn(gtk.NewTreeViewColumnWithAttributes("icon", gtk.NewCellRendererPixbuf(), "pixbuf", 0))
+	treeview.AppendColumn(gtk.NewTreeViewColumnWithAttributes("name", gtk.NewCellRendererText(), "text", 0))
+
+	go func() {
+		for accounts := range ch {
+			gthread(func() {
+				store.Clear()
+				for _, a := range accounts {
+					var iter gtk.TreeIter
+					store.Append(&iter)
+					store.Set(&iter, 0, a.Name)
+				}
+			})
+		}
+	}()
 
 	swin := gtk.NewScrolledWindow(nil, nil)
 	swin.Add(treeview)

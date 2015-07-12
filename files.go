@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	// TODO: path
 	KEY_PATH = "/tmp/key"
 )
 
