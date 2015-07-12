@@ -67,6 +67,11 @@ func NewKey(passphrase []byte) ([]byte, error) {
 	return key, nil
 }
 
+func KeyExist() bool {
+	_, err := os.Stat(KEY_PATH)
+	return err == nil
+}
+
 func passphraseToAESKey(passphrase []byte) []byte {
 	res := make([]byte, 32)
 	copy(res, passphrase)
